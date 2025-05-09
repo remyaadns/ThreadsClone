@@ -7,6 +7,7 @@ export const fetchPosts = async () => {
   const { data } = await supabase
     .from('posts')
     .select('*, user:profiles(*), replies:posts(count)')
+    .order('created_at', { ascending: false })
     .throwOnError();
 
   return data;
@@ -19,7 +20,7 @@ export const createPost = async (newPost: PostInput) => {
     .select('*')
     .throwOnError();
 
-  return data;posts_parent_id_fkey
+  return data;
 };
 
 export const getPostById = async (id: string) => {
