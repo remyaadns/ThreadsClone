@@ -10,6 +10,9 @@ dayjs.extend(relativeTime);
 
 type PostWithUser = Tables<'posts'> & {
   user: Tables<'profiles'>;
+  replies: {
+    count: number;
+  }[];
 };
 
 export default function PostListItem({ post }: { post: PostWithUser }) {
@@ -48,7 +51,7 @@ export default function PostListItem({ post }: { post: PostWithUser }) {
 
             <Pressable className='flex-row items-center'>
               <Ionicons name='chatbubble-outline' size={20} color='#d1d5db' />
-              <Text className='text-gray-300 ml-2'>{0}</Text>
+              <Text className='text-gray-300 ml-2'>{post?.replies?.[0].count || 0}</Text>
             </Pressable>
 
             <Pressable className='flex-row items-center'>
