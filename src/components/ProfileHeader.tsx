@@ -35,6 +35,7 @@ export default function ProfileHeader() {
           bucket='avatars'
           path={profile?.avatar_url}
           className='w-20 h-20 rounded-full'
+          transform={{ width: 80, height: 80 }}
         />
       </View>
 

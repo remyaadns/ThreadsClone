@@ -27,6 +27,7 @@ export default function PostDetails({ post }: { post: PostWithUser }) {
             bucket='avatars'
             path={post.user.avatar_url}
             className='w-12 h-12 rounded-full'
+            transform={{ width: 50, height: 50 }}
           />
           <Text className='text-white font-bold mr-2'>
             {post.user.username}
@@ -47,6 +48,7 @@ export default function PostDetails({ post }: { post: PostWithUser }) {
                 bucket='media'
                 path={image}
                 className='w-full aspect-square rounded-lg'
+                transform={{ width: 800, height: 800 }}
               />
             ))}
           </View>
