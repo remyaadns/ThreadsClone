@@ -3,6 +3,10 @@ import * as Notifications from 'expo-notifications';
 import * as Device from 'expo-device';
 import Constants from 'expo-constants';
 import { Platform } from 'react-native';
+import { useAuth } from './AuthProvider';
+import { useMutation } from '@tanstack/react-query';
+import { updateProfile } from '@/services/profiles';
+import { TablesInsert } from '@/types/database.types';
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -23,6 +27,20 @@ export default function NotificationsProvider({ children }: PropsWithChildren) {
   >(undefined);
   const notificationListener = useRef<Notifications.EventSubscription>(null);
   const responseListener = useRef<Notifications.EventSubscription>(null);
+
+  const { user } = useAuth();
+  const { mutate: updateMutation } = useMutation({
+    mutationFn: (data: TablesInsert<'profiles'>) =>
+      updateProfile(user!.id, data),
+  });
+
+  useEffect(() => {
+    if (expoPushToken) {
+      updateMutation({
+        push_token: expoPushToken,
+      });
+    }
+  }, [expoPushToken]);
 
   useEffect(() => {
     registerForPushNotificationsAsync().then(

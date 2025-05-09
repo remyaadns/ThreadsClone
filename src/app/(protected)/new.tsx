@@ -30,7 +30,7 @@ export default function NewPostScreen() {
 
   const { mutate, isPending, error } = useMutation({
     mutationFn: async () => {
-      let imagePath = null;
+      let imagePath = undefined;
       if (image) {
         imagePath = await uploadImage();
       }
@@ -38,7 +38,7 @@ export default function NewPostScreen() {
       return createPost({
         content: text,
         user_id: user!.id,
-        images: [imagePath],
+        images: imagePath ? [imagePath] : undefined,
       });
     },
     onSuccess: (data) => {
