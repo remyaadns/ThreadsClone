@@ -19,7 +19,7 @@ export const createPost = async (newPost: PostInput) => {
     .select('*')
     .throwOnError();
 
-  return data;
+  return data;posts_parent_id_fkey
 };
 
 export const getPostById = async (id: string) => {
@@ -29,6 +29,8 @@ export const getPostById = async (id: string) => {
     .eq('id', id)
     .single()
     .throwOnError();
+
+  console.log(JSON.stringify(data, null, 2));
 
   return data;
 };
