@@ -68,6 +68,8 @@ export default function NotificationsProvider({ children }: PropsWithChildren) {
     };
   }, []);
 
+  console.log(expoPushToken);
+
   return children;
 }
 
@@ -130,6 +132,7 @@ async function registerForPushNotificationsAsync() {
       ).data;
       console.log(token);
     } catch (e) {
+      console.log('Error: ', e);
       token = `${e}`;
     }
   } else {
