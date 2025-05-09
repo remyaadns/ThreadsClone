@@ -8,16 +8,19 @@ import {
   KeyboardAvoidingView,
   Platform,
   Alert,
+  Image,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useAuth } from '@/providers/AuthProvider';
-
+import { Entypo } from '@expo/vector-icons';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { router } from 'expo-router';
 import { createPost } from '@/services/posts';
+import * as ImagePicker from 'expo-image-picker';
 
 export default function NewPostScreen() {
   const [text, setText] = useState('');
+  const [image, setImage] = useState<string | null>(null);
 
   const { user } = useAuth();
 
@@ -35,6 +38,21 @@ export default function NewPostScreen() {
       // Alert.alert('Error', error.message);
     },
   });
+
+  const pickImage = async () => {
+    // No permissions request is necessary for launching the image library
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ['images'],
+      allowsEditing: true,
+      quality: 1,
+    });
+
+    console.log(result);
+
+    if (!result.canceled) {
+      setImage(result.assets[0].uri);
+    }
+  };
 
   return (
     <SafeAreaView edges={['bottom']} className='p-4 flex-1'>
@@ -55,9 +73,20 @@ export default function NewPostScreen() {
           numberOfLines={4}
         />
 
+        {image && (
+          <Image
+            source={{ uri: image }}
+            className='w-1/2 aspect-square rounded-lg my-4'
+          />
+        )}
+
         {error && (
           <Text className='text-red-500 text-sm mt-4'>{error.message}</Text>
         )}
+
+        <View className='flex-row items-center gap-2 mt-4'>
+          <Entypo onPress={pickImage} name='images' size={20} color='gray' />
+        </View>
 
         <View className='mt-auto'>
           <Pressable
