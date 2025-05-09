@@ -4,8 +4,9 @@ import { useQuery } from '@tanstack/react-query';
 import { useLocalSearchParams } from 'expo-router';
 import { View, Text, ActivityIndicator, FlatList } from 'react-native';
 import { getPostById, getPostsReplies } from '@/services/posts';
+import PostDetails from '@/components/PostDetails';
 
-export default function PostDetails() {
+export default function PostDetailsScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
 
   const {
@@ -36,7 +37,14 @@ export default function PostDetails() {
       <FlatList
         data={replies || []}
         renderItem={({ item }) => <PostListItem post={item} />}
-        ListHeaderComponent={<PostListItem post={post} />}
+        ListHeaderComponent={
+          <>
+            <PostDetails post={post} />
+            <Text className='text-white text-lg font-bold p-4 border-b border-neutral-800'>
+              Replies
+            </Text>
+          </>
+        }
       />
       <PostReplyInput postId={id} />
     </View>
