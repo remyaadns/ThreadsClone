@@ -1,29 +1,26 @@
 import PostListItem from '@/components/PostListItem';
 import PostReplyInput from '@/components/PostReplyInput';
-import { supabase } from '@/lib/supabase';
 import { useQuery } from '@tanstack/react-query';
 import { useLocalSearchParams } from 'expo-router';
 import { View, Text, ActivityIndicator, FlatList } from 'react-native';
-
-const getPostById = async (id: string) => {
-  console.log('Fetching post by id:', id);
-  const { data } = await supabase
-    .from('posts')
-    .select('*, user:profiles(*)')
-    .eq('id', id)
-    .single()
-    .throwOnError();
-
-  return data;
-};
+import { getPostById, getPostsReplies } from '@/services/posts';
 
 export default function PostDetails() {
   const { id } = useLocalSearchParams<{ id: string }>();
 
-  const { data, isLoading, error } = useQuery({
+  const {
+    data: post,
+    isLoading,
+    error,
+  } = useQuery({
     queryKey: ['posts', id],
     queryFn: () => getPostById(id),
     staleTime: 1000 * 60 * 5,
+  });
+
+  const { data: replies } = useQuery({
+    queryKey: ['posts', id, 'replies'],
+    queryFn: () => getPostsReplies(id),
   });
 
   if (isLoading) {
@@ -37,9 +34,9 @@ export default function PostDetails() {
   return (
     <View className='flex-1 '>
       <FlatList
-        data={[]}
+        data={replies || []}
         renderItem={({ item }) => <PostListItem post={item} />}
-        ListHeaderComponent={<PostListItem post={data} />}
+        ListHeaderComponent={<PostListItem post={post} />}
       />
       <PostReplyInput postId={id} />
     </View>
