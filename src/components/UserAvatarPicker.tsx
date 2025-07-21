@@ -62,8 +62,7 @@ export default function UserAvatarPicker({
       <SupabaseImage
         bucket='avatars'
         path={currentAvatar}
-        className='w-24 h-24 rounded-full self-center'
-      />
+        className='w-24 h-24 rounded-full self-center' transform={undefined}      />
     </Pressable>
   );
 }

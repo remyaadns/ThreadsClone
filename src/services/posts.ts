@@ -28,7 +28,7 @@ export const getPostById = async (id: string) => {
     .from('posts')
     .select('*, user:profiles(*), replies:posts(count)')
     .eq('id', id)
-    .single()
+    // .single()
     .throwOnError();
 
   return data;

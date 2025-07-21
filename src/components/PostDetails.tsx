@@ -1,3 +1,177 @@
+// import { View, Text, Image, Pressable } from 'react-native';
+// import { Post } from '@/types';
+// import { Ionicons } from '@expo/vector-icons';
+// import dayjs from 'dayjs';
+// import relativeTime from 'dayjs/plugin/relativeTime';
+// import { Tables } from '@/types/database.types';
+// import { Link } from 'expo-router';
+// import { supabase } from '@/lib/supabase';
+// import SupabaseImage from './SupabaseImage';
+
+// dayjs.extend(relativeTime);
+
+// type PostWithUser = Tables<'posts'> & {
+//   user: Tables<'profiles'>;
+//   replies: {
+//     count: number;
+//   }[];
+// };
+
+// export default function PostDetails({ post }: { post: PostWithUser }) {
+//   return (
+//     <Link href={`/posts/${post.id}`} asChild>
+//       <Pressable className='p-4 border-b border-gray-800/70 gap-4'>
+//         {/* Author info */}
+//         <View className='flex-1 flex-row items-center gap-3'>
+//           <SupabaseImage
+//             bucket='avatars'
+//             path={post?.user?.avatar_url}
+//             className='w-12 h-12 rounded-full'
+//             transform={{ width: 50, height: 50 }}
+//           />
+//           <Text className='text-white font-bold mr-2'>
+//             {post.user?.username}
+//           </Text>
+//           <Text className='text-gray-500'>
+//             {dayjs(post.created_at).fromNow()}
+//           </Text>
+//         </View>
+
+//         {/* Post Content */}
+//         <Text className='text-white'>{post.content}</Text>
+
+//         {post.images && (
+//           <View className='flex-row gap-2 mt-2'>
+//             {post.images.map((image: string) => (
+//               <SupabaseImage
+//                 key={image}
+//                 bucket='media'
+//                 path={image}
+//                 className='w-full aspect-square rounded-lg'
+//                 transform={{ width: 800, height: 800 }}
+//               />
+//             ))}
+//           </View>
+//         )}
+
+//         {/* Interaction Buttons */}
+//         <View className='flex-row gap-4'>
+//           <Pressable className='flex-row items-center'>
+//             <Ionicons name='heart-outline' size={20} color='#d1d5db' />
+//             <Text className='text-gray-300 ml-2'>0</Text>
+//           </Pressable>
+
+//           <Pressable className='flex-row items-center'>
+//             <Ionicons name='chatbubble-outline' size={20} color='#d1d5db' />
+//             <Text className='text-gray-300 ml-2'>
+//               {post?.replies?.[0].count || 0}
+//             </Text>
+//           </Pressable>
+
+//           <Pressable className='flex-row items-center'>
+//             <Ionicons name='repeat-outline' size={20} color='#d1d5db' />
+//             <Text className='text-gray-300 ml-2'>0</Text>
+//           </Pressable>
+
+//           <Pressable>
+//             <Ionicons name='paper-plane-outline' size={20} color='#d1d5db' />
+//           </Pressable>
+//         </View>
+//       </Pressable>
+//     </Link>
+//   );
+// }
+
+/// this works, the old way before mutliple posts/carousel
+// import { View, Text, Image, Pressable } from 'react-native';
+// import { Post } from '@/types';
+// import { Ionicons } from '@expo/vector-icons';
+// import dayjs from 'dayjs';
+// import relativeTime from 'dayjs/plugin/relativeTime';
+// import { Tables } from '@/types/database.types';
+// import { Link } from 'expo-router';
+// import { supabase } from '@/lib/supabase';
+// import SupabaseImage from './SupabaseImage';
+
+// dayjs.extend(relativeTime);
+
+// type PostWithUser = Tables<'posts'> & {
+//   user: Tables<'profiles'>;
+//   replies: {
+//     count: number;
+//   }[];
+// };
+
+// export default function PostDetails({ post }: { post: PostWithUser }) {
+//   // Handle if post is an array (take first item)
+//   const postData = Array.isArray(post) ? post[0] : post;
+
+//   return (
+//     <Link href={`/posts/${postData.id}`} asChild>
+//       <Pressable className='p-4 border-b border-gray-800/70 gap-4'>
+//         {/* Author info */}
+//         <View className='flex-1 flex-row items-center gap-3'>
+//           <SupabaseImage
+//             bucket='avatars'
+//             path={postData?.user?.avatar_url}
+//             className='w-12 h-12 rounded-full'
+//           />
+//           <Text className='text-white font-bold mr-2'>
+//             {postData?.user?.username || 'Unknown User'}
+//           </Text>
+//           <Text className='text-gray-500'>
+//             {postData?.created_at ? dayjs(postData.created_at).fromNow() : 'Unknown time'}
+//           </Text>
+//         </View>
+
+//         {/* Post Content */}
+//         <Text className='text-white'>{postData?.content || 'No content'}</Text>
+
+//         {/* Post Images */}
+//         {postData?.images && Array.isArray(postData.images) && postData.images.length > 0 && (
+//           <View className='flex-row gap-2 mt-2'>
+//             {postData.images.map((image: string, index: number) => (
+//               <SupabaseImage
+//                 key={`${image}-${index}`}
+//                 bucket='media'
+//                 path={image}
+//                 // className='w-full aspect-square rounded-lg'
+//                 className='w-full h-[500px] rounded-lg'
+//               />
+//             ))}
+//           </View>
+//         )}
+
+//         {/* Interaction Buttons */}
+//         <View className='flex-row gap-4'>
+//           <Pressable className='flex-row items-center'>
+//             <Ionicons name='heart-outline' size={20} color='#d1d5db' />
+//             {/* <Text className='text-gray-300 ml-2'>1.5k</Text> */}
+//           </Pressable>
+
+//           <Pressable className='flex-row items-center'>
+//             <Ionicons name='chatbubble-outline' size={20} color='#d1d5db' />
+//             <Text className='text-gray-300 ml-2'> 
+//               {/* {postData?.replies?.[0]?.count || 20} */}
+//             </Text>
+//           </Pressable>
+
+//           <Pressable className='flex-row items-center'>
+//             <Ionicons name='repeat-outline' size={20} color='#d1d5db' />
+//             {/* <Text className='text-gray-300 ml-2'>10</Text> */}
+//           </Pressable>
+
+//            <Pressable className='flex-row items-center'>
+//             <Ionicons name='paper-plane-outline' size={20} color='#d1d5db' />
+//              {/* <Text className='text-gray-300 ml-2'>5</Text> */}
+//           </Pressable>
+//         </View>
+//       </Pressable>
+//     </Link>
+//   );
+// }
+
+
 import { View, Text, Image, Pressable } from 'react-native';
 import { Post } from '@/types';
 import { Ionicons } from '@expo/vector-icons';
@@ -7,6 +181,7 @@ import { Tables } from '@/types/database.types';
 import { Link } from 'expo-router';
 import { supabase } from '@/lib/supabase';
 import SupabaseImage from './SupabaseImage';
+import PostImageCarousel from './PostImageCarousel';
 
 dayjs.extend(relativeTime);
 
@@ -18,66 +193,61 @@ type PostWithUser = Tables<'posts'> & {
 };
 
 export default function PostDetails({ post }: { post: PostWithUser }) {
+  // Handle if post is an array (take first item)
+  const postData = Array.isArray(post) ? post[0] : post;
+
   return (
-    <Link href={`/posts/${post.id}`} asChild>
-      <Pressable className='p-4 border-b border-gray-800/70 gap-4'>
-        {/* Author info */}
-        <View className='flex-1 flex-row items-center gap-3'>
-          <SupabaseImage
-            bucket='avatars'
-            path={post.user.avatar_url}
-            className='w-12 h-12 rounded-full'
-            transform={{ width: 50, height: 50 }}
-          />
-          <Text className='text-white font-bold mr-2'>
-            {post.user.username}
+    <View className='p-4 border-b border-gray-800/70 gap-4'>
+      {/* Author info */}
+      <View className='flex-1 flex-row items-center gap-3'>
+        <SupabaseImage
+          bucket='avatars'
+          path={postData?.user?.avatar_url}
+          className='w-12 h-12 rounded-full'
+        />
+        <Text className='text-white font-bold mr-2'>
+          {postData?.user?.username || 'Unknown User'}
+        </Text>
+        <Text className='text-gray-500'>
+          {postData?.created_at ? dayjs(postData.created_at).fromNow() : 'Unknown time'}
+        </Text>
+      </View>
+
+      {/* Post Content */}
+      <Text className='text-white'>{postData?.content || 'No content'}</Text>
+
+      {/* Post Images with Carousel */}
+      {postData?.images && Array.isArray(postData.images) && postData.images.length > 0 && (
+        <PostImageCarousel 
+          images={postData.images} 
+          context="detail" 
+        />
+      )}
+
+      {/* Interaction Buttons */}
+      <View className='flex-row gap-4'>
+        <Pressable className='flex-row items-center'>
+          <Ionicons name='heart-outline' size={20} color='#d1d5db' />
+          {/* <Text className='text-gray-300 ml-2'>1.5k</Text> */}
+        </Pressable>
+
+        <Pressable className='flex-row items-center'>
+          <Ionicons name='chatbubble-outline' size={20} color='#d1d5db' />
+          <Text className='text-gray-300 ml-2'> 
+            {/* {postData?.replies?.[0]?.count || 20} */}
           </Text>
-          <Text className='text-gray-500'>
-            {dayjs(post.created_at).fromNow()}
-          </Text>
-        </View>
+        </Pressable>
 
-        {/* Post Content */}
-        <Text className='text-white'>{post.content}</Text>
+        <Pressable className='flex-row items-center'>
+          <Ionicons name='repeat-outline' size={20} color='#d1d5db' />
+          {/* <Text className='text-gray-300 ml-2'>10</Text> */}
+        </Pressable>
 
-        {post.images && (
-          <View className='flex-row gap-2 mt-2'>
-            {post.images.map((image) => (
-              <SupabaseImage
-                key={image}
-                bucket='media'
-                path={image}
-                className='w-full aspect-square rounded-lg'
-                transform={{ width: 800, height: 800 }}
-              />
-            ))}
-          </View>
-        )}
-
-        {/* Interaction Buttons */}
-        <View className='flex-row gap-4'>
-          <Pressable className='flex-row items-center'>
-            <Ionicons name='heart-outline' size={20} color='#d1d5db' />
-            <Text className='text-gray-300 ml-2'>0</Text>
-          </Pressable>
-
-          <Pressable className='flex-row items-center'>
-            <Ionicons name='chatbubble-outline' size={20} color='#d1d5db' />
-            <Text className='text-gray-300 ml-2'>
-              {post?.replies?.[0].count || 0}
-            </Text>
-          </Pressable>
-
-          <Pressable className='flex-row items-center'>
-            <Ionicons name='repeat-outline' size={20} color='#d1d5db' />
-            <Text className='text-gray-300 ml-2'>0</Text>
-          </Pressable>
-
-          <Pressable>
-            <Ionicons name='paper-plane-outline' size={20} color='#d1d5db' />
-          </Pressable>
-        </View>
-      </Pressable>
-    </Link>
+         <Pressable className='flex-row items-center'>
+          <Ionicons name='paper-plane-outline' size={20} color='#d1d5db' />
+           {/* <Text className='text-gray-300 ml-2'>5</Text> */}
+        </Pressable>
+      </View>
+    </View>
   );
 }
